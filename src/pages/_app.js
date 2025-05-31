@@ -34,8 +34,13 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+
+const ReactQueryDevtoolsProduction = React.lazy(() =>
+  import("@tanstack/react-query-devtools/build/modern/production.js").then((d) => ({
+    default: d.ReactQueryDevtools,
+  }))
+);
 TimeAgo.addDefaultLocale(en);
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 const clientSideEmotionCache = createEmotionCache();
@@ -45,6 +50,8 @@ const App = (props) => {
   const preferredTheme = useMediaPredicate("(prefers-color-scheme: dark)") ? "dark" : "light";
   const pathname = usePathname();
   const route = useRouter();
+
+  const excludeQueryKeys = ["authmeswa"];
 
   // 👇 Persist TanStack Query cache to localStorage
   useEffect(() => {
@@ -59,6 +66,24 @@ const App = (props) => {
         maxAge: 1000 * 60 * 60 * 24, // 24 hours
         staleTime: 1000 * 60 * 5, // optional: 5 minutes
         buster: "v1",
+        dehydrateOptions: {
+          shouldDehydrateQuery: (query) => {
+            const queryIsReadyForPersistence = query.state.status === "success";
+            if (queryIsReadyForPersistence) {
+              const { queryKey } = query;
+              // Check if queryKey exists and has elements before accessing index 0
+              if (!queryKey || !queryKey.length) {
+                return false;
+              }
+              const queryKeyString = String(queryKey[0] || "");
+              const excludeFromPersisting = excludeQueryKeys.some((key) =>
+                queryKeyString.includes(key)
+              );
+              return !excludeFromPersisting;
+            }
+            return queryIsReadyForPersistence;
+          },
+        },
       });
     }
   }, []);
@@ -158,7 +183,7 @@ const App = (props) => {
                       </ThemeProvider>
                       {settings.isInitialized && settings?.showDevtools === true ? (
                         <React.Suspense fallback={null}>
-                          <ReactQueryDevtools />
+                          <ReactQueryDevtoolsProduction />
                         </React.Suspense>
                       ) : null}
                     </>
