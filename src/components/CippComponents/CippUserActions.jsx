@@ -8,6 +8,7 @@ import {
   Email,
   ForwardToInbox,
   GroupAdd,
+  LockClock,
   LockOpen,
   LockPerson,
   LockReset,
@@ -189,6 +190,47 @@ export const CippUserActions = () => {
       confirmText: "Are you sure you want to add the user to this group?",
     },
     {
+      label: "Manage Licenses",
+      type: "POST",
+      url: "/api/ExecBulkLicense",
+      icon: <CloudDone />,
+      data: { userIds: "id" },
+      multiPost: true,
+      fields: [
+        {
+          type: "radio",
+          name: "LicenseOperation",
+          label: "License Operation",
+          options: [
+            { label: "Add Licenses", value: "Add" },
+            { label: "Remove Licenses", value: "Remove" },
+            { label: "Replace Licenses", value: "Replace" },
+          ],
+          required: true,
+        },
+        {
+          type: "switch",
+          name: "RemoveAllLicenses",
+          label: "Remove All Existing Licenses",
+        },
+        {
+          type: "autoComplete",
+          name: "Licenses",
+          label: "Select Licenses",
+          multiple: true,
+          creatable: false,
+          api: {
+            url: "/api/ListLicenses",
+            labelField: "skuPartNumber",
+            valueField: "skuId",
+            queryKey: `licenses-${tenant}`,
+          },
+        },
+      ],
+      confirmText: "Are you sure you want to manage licenses for the selected users?",
+      multiPost: true,
+    },
+    {
       label: "Disable Email Forwarding",
       type: "POST",
       url: "/api/ExecEmailForward",
@@ -225,7 +267,7 @@ export const CippUserActions = () => {
           name: "siteUrl",
           label: "Select a Site",
           multiple: false,
-          creatable: false,
+          creatable: true,
           api: {
             url: "/api/ListSites",
             data: { type: "SharePointSiteUsage", URLOnly: true },
@@ -283,6 +325,29 @@ export const CippUserActions = () => {
         displayName: "displayName",
       },
       confirmText: "Are you sure you want to reset the password for this user?",
+      multiPost: false,
+    },
+    {
+      label: "Set Password Never Expires",
+      type: "POST",
+      icon: <LockClock />,
+      url: "/api/ExecPasswordNeverExpires",
+      data: { userId: "id", userPrincipalName: "userPrincipalName" },
+      fields: [
+        {
+          type: "autoComplete",
+          name: "PasswordPolicy",
+          label: "Password Policy",
+          options: [
+            { label: "Disable Password Expiration", value: "DisablePasswordExpiration" },
+            { label: "Enable Password Expiration", value: "None" },
+          ],
+          multiple: false,
+          creatable: false,
+        },
+      ],
+      confirmText:
+        "Set Password Never Expires state for this user. If the password of the user is older than the set expiration date of the organization, the user will be prompted to change their password at their next login.",
       multiPost: false,
     },
     {
