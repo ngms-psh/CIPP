@@ -98,7 +98,7 @@ export const CippApiDialog = (props) => {
       if (typeof value === "string" && value.startsWith("!")) {
         newData[key] = value.slice(1);
       } else if (typeof value === "string") {
-        newData[key] = row[value] ?? value;
+        newData[key] = row.hasOwnProperty(value) ? row[value] : value;
       } else if (typeof value === "boolean") {
         newData[key] = value;
       } else if (typeof value === "object" && value !== null) {
