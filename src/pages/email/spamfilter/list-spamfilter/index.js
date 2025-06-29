@@ -92,25 +92,69 @@ const Page = () => {
     "WhenChanged",
   ];
 
+  const outboundSimpleColumns = [
+  "Name",
+  "IsDefault",
+  "ruleState",
+  "rulePrio",
+  "From",
+  "FromMemberOf",
+  "SenderDomainIs",
+  "ExceptIfFrom",
+  "ExceptIfFromMemberOf",
+  "ExceptIfSenderDomainIs",
+  "RecipientLimitExternalPerHour",
+  "RecipientLimitInternalPerHour",
+  "RecipientLimitPerDay",
+  "ActionWhenThresholdReached",
+  "AutoForwardingMode",
+  "BccSuspiciousOutboundMail",
+  "BccSuspiciousOutboundAdditionalRecipients",
+  "NotifyOutboundSpam",
+  "NotifyOutboundSpamRecipients",
+  "WhenCreated",
+  "WhenChanged",
+];
+
   return (
-    <CippTablePage
-      title={pageTitle}
-      apiUrl={apiUrl}
-      actions={actions}
-      offCanvas={offCanvas}
-      simpleColumns={simpleColumns}
-      cardButton={
-        <>
-          <Button
-            component={Link}
-            href="/email/spamfilter/list-spamfilter/add"
-            startIcon={<RocketLaunch />}
-          >
-            Deploy Spamfilter
-          </Button>
-        </>
-      }
-    />
+    <>
+      <CippTablePage
+        title={`Inbound - ${pageTitle}`}
+        apiUrl={apiUrl}
+        actions={actions}
+        offCanvas={offCanvas}
+        simpleColumns={simpleColumns}
+        cardButton={
+          <>
+            <Button
+              component={Link}
+              href="/email/spamfilter/list-spamfilter/add"
+              startIcon={<RocketLaunch />}
+            >
+              Deploy Spamfilter
+            </Button>
+          </>
+        }
+      />
+      <CippTablePage
+        title={`Outbound - ${pageTitle}`}
+        apiUrl="/api/ListOutboundSpamFilter"
+        actions={actions}
+        offCanvas={offCanvas}
+        simpleColumns={outboundSimpleColumns}
+        cardButton={
+          <>
+            <Button
+              component={Link}
+              href="/email/spamfilter/list-spamfilter/add"
+              startIcon={<RocketLaunch />}
+            >
+              Deploy Spamfilter
+            </Button>
+          </>
+        }
+      />
+    </>
   );
 };
 
