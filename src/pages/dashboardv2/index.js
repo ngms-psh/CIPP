@@ -3,25 +3,25 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useForm, useWatch } from "react-hook-form";
 import { Grid } from "@mui/system";
-import { useSettings } from "/src/hooks/use-settings";
-import { ApiGetCall } from "/src/api/ApiCall.jsx";
-import Portals from "/src/data/portals";
-import { BulkActionsMenu } from "/src/components/bulk-actions-menu.js";
-import { ExecutiveReportButton } from "/src/components/ExecutiveReportButton.js";
-import { TabbedLayout } from "/src/layouts/TabbedLayout";
-import { Layout as DashboardLayout } from "/src/layouts/index.js";
+import { useSettings } from "../../hooks/use-settings";
+import { ApiGetCall } from "../../api/ApiCall.jsx";
+import Portals from "../../data/portals";
+import { BulkActionsMenu } from "../../components/bulk-actions-menu.js";
+import { ExecutiveReportButton } from "../../components/ExecutiveReportButton.js";
+import { TabbedLayout } from "../../layouts/TabbedLayout";
+import { Layout as DashboardLayout } from "../../layouts/index.js";
 import tabOptions from "./tabOptions";
-import { dashboardDemoData } from "/src/data/dashboardv2-demo-data";
-import { SecureScoreCard } from "/src/components/CippComponents/SecureScoreCard";
-import { MFACard } from "/src/components/CippComponents/MFACard";
-import { AuthMethodCard } from "/src/components/CippComponents/AuthMethodCard";
-import { LicenseCard } from "/src/components/CippComponents/LicenseCard";
-import { TenantInfoCard } from "/src/components/CippComponents/TenantInfoCard";
-import { TenantMetricsGrid } from "/src/components/CippComponents/TenantMetricsGrid";
-import { AssessmentCard } from "/src/components/CippComponents/AssessmentCard";
-import { CippApiDialog } from "/src/components/CippComponents/CippApiDialog";
-import { CippAddTestReportDrawer } from "/src/components/CippComponents/CippAddTestReportDrawer";
-import CippFormComponent from "/src/components/CippComponents/CippFormComponent";
+import { dashboardDemoData } from "../../data/dashboardv2-demo-data";
+import { SecureScoreCard } from "../../components/CippComponents/SecureScoreCard";
+import { MFACard } from "../../components/CippComponents/MFACard";
+import { AuthMethodCard } from "../../components/CippComponents/AuthMethodCard";
+import { LicenseCard } from "../../components/CippComponents/LicenseCard";
+import { TenantInfoCard } from "../../components/CippComponents/TenantInfoCard";
+import { TenantMetricsGrid } from "../../components/CippComponents/TenantMetricsGrid";
+import { AssessmentCard } from "../../components/CippComponents/AssessmentCard";
+import { CippApiDialog } from "../../components/CippComponents/CippApiDialog";
+import { CippAddTestReportDrawer } from "../../components/CippComponents/CippAddTestReportDrawer";
+import CippFormComponent from "../../components/CippComponents/CippFormComponent";
 import {
   Devices as DevicesIcon,
   CheckCircle as CheckCircleIcon,
@@ -80,7 +80,7 @@ const Page = () => {
           query: { ...router.query, reportId: reportIdValue.reportId.value },
         },
         undefined,
-        { shallow: true }
+        { shallow: true },
       );
     }
   }, [reportIdValue]);
@@ -171,7 +171,7 @@ const Page = () => {
   useEffect(() => {
     if (currentTenantInfo.isSuccess) {
       const tenantLookup = currentTenantInfo.data?.find(
-        (tenant) => tenant.defaultDomainName === currentTenant
+        (tenant) => tenant.defaultDomainName === currentTenant,
       );
 
       // Get filtered portals based on user preferences
@@ -341,14 +341,14 @@ const Page = () => {
                   <SecureScoreCard
                     data={testsApi.data?.SecureScore}
                     isLoading={testsApi.isFetching}
-                    sx={{ height: '100%' }}
+                    sx={{ height: "100%" }}
                   />
                 </Box>
                 <Box sx={{ height: 450 }}>
                   <AuthMethodCard
                     data={testsApi.data?.MFAState}
                     isLoading={testsApi.isFetching}
-                    sx={{ height: '100%' }}
+                    sx={{ height: "100%" }}
                   />
                 </Box>
               </Box>
@@ -361,14 +361,14 @@ const Page = () => {
                   <MFACard
                     data={testsApi.data?.MFAState}
                     isLoading={testsApi.isFetching}
-                    sx={{ height: '100%' }}
+                    sx={{ height: "100%" }}
                   />
                 </Box>
                 <Box sx={{ height: 450 }}>
                   <LicenseCard
                     data={testsApi.data?.LicenseData}
                     isLoading={testsApi.isFetching}
-                    sx={{ height: '100%' }}
+                    sx={{ height: "100%" }}
                   />
                 </Box>
               </Box>
